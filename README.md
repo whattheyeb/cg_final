@@ -52,23 +52,7 @@
 ---
 
 ## 프로젝트 구조
-/public
-    /models
-    - Car.glb
-    - country side road seamless.glb
-    /textures
-    - bambanani_sunset.jpg
-/src
-- main.js
-    /scripts
-    - InputManager.js
-    - CarController.js
-    - CameraController.js
-    - ObstacleManager.js
-    - UIManager.js
-    - RoadManager.js
-- README.md
-- index.html
+<img src = 'https://github.com/whattheyeb/cg_final/blob/main/captures/folderStructure.png' width='60%'/>
 
 ## 앞으로의 개선 방향
 - 도로 굴곡 및 회전 구현 강화 (랜덤 각도, 베지어 곡선 등)
