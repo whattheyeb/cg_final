@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+
+  <!-- index.html에 추가할 부분 -->
+<div id="ui">
+  <div id="speedDisplay">Speed: 0</div>
+  <div id="gameOverMessage" style="display: none;">🚗 Game Over!</div>
+</div>
+
+<!-- 예시
+<div id="speed" style="position: absolute; top: 10px; left: 10px; color: white; font-size: 20px;"></div> -->
+
+
+<style>
+  #ui {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    font-family: sans-serif;
+    font-size: 20px;
+    z-index: 10;
+  }
+
+  #gameOverMessage {
+    margin-top: 10px;
+    color: red;
+    font-size: 30px;
+  }
+</style>
+
+</html>
