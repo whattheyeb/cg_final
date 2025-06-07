@@ -1,5 +1,7 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as THREE from 'three';
+import { gsap } from 'gsap';
+
 
 class ObstacleManager {
   constructor(scene, car, onGameOver, uiManager) {
@@ -12,7 +14,7 @@ class ObstacleManager {
     this.zombieLoader = new GLTFLoader();
 
     this.spawnTimer = 0;
-    this.spawnInterval = 3 + Math.random() * 4;
+    this.spawnInterval = 2 + Math.random() * 2;
 
     this.heart = 3;
 
@@ -71,16 +73,31 @@ class ObstacleManager {
     }
   }
 
-  spawnZombie() {
-    this.zombieLoader.load('public/models/Zombie (1).glb', (gltf) => {
-      const zombie = gltf.scene;
-      zombie.scale.set(4, 4, 4);
-      zombie.position.set(0, 10, this.car.position.z + 50);
+spawnZombie() {
+  this.zombieLoader.load('public/models/Zombie (1).glb', (gltf) => {
+    const zombie = gltf.scene;
+    zombie.scale.set(4, 4, 4);
 
-      this.scene.add(zombie);
-      this.zombieList.push(zombie);
+    // 랜덤 x좌표
+    const randomX = Math.random() * 20 - 10;
+    const startY = 0;  // 시작 y값 (지면 아래)
+    const targetY = 10; // 최종 y값
+
+    zombie.position.set(randomX, startY, this.car.position.z + 30);
+    zombie.rotation.y = Math.PI;
+
+    this.scene.add(zombie);
+    this.zombieList.push(zombie);
+
+    // 올라오는 애니메이션
+    gsap.to(zombie.position, {
+      y: targetY,
+      duration: 1.2,
+      ease: 'power2.out'
     });
-  }
+  });
+}
+
 
   reset() {
     this.heart = 3;
