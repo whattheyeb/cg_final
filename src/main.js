@@ -50,12 +50,16 @@ let gameOver = false;
 
 let fallTimer = 0;
 
-const obstacleManager = new ObstacleManager(scene, null, () => {  // 수정됨: 초기 car가 없으므로 null로
+//zombie(1).glb 모델 로드
+const zombieLoader = new GLTFLoader();
+const zombieList = [];
+
+const obstacleManager = new ObstacleManager(scene, null, () => {
   if (!gameOver) {
     gameOver = true;
-    uiManager.showGameOver();
+    uiManager.showGameOver(restartGame);
   }
-});
+}, uiManager);
 
 // Car 모델 로드
 loader.load('public/models/Car.glb', (gltf) => {
@@ -111,6 +115,7 @@ function restartGame() {
   gameOver = false;
   fallTimer = 0;
   uiManager.hideGameOver();
+  obstacleManager.reset();
 }
 
 

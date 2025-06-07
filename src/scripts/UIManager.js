@@ -42,4 +42,14 @@ export default class UIManager {
   hideGameOver() {
     this.gameOverPanel.style.display = 'none';
   }
+
+  updateHearts(heart) {
+  for (let i = 1; i <= 3; i++) {
+    const heartEl = document.getElementById(`heart${i}`);
+    if (heartEl) {
+      heartEl.style.opacity = i <= heart ? '1' : '0.2';
+    }
+  }
+}
+
 }

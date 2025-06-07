@@ -1,85 +1,102 @@
-// scripts/ObstacleManager.js
-
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as THREE from 'three';
 
-export default class ObstacleManager {
-  constructor(scene, car, onCollision) {
+class ObstacleManager {
+  constructor(scene, car, onGameOver, uiManager) {
     this.scene = scene;
     this.car = car;
-    this.onCollision = onCollision;
+    this.onGameOver = onGameOver;
+    this.uiManager = uiManager;
 
-    this.obstacles = [];
-    this.spawnInterval = 2; // 초마다 장애물 생성
-    this.timeSinceLastSpawn = 0;
+    this.zombieList = [];
+    this.zombieLoader = new GLTFLoader();
 
-    this.spawnZ = 100; // 카메라 앞에서 생성될 위치
-    this.despawnZ = -50; // 이보다 뒤로 가면 제거
+    this.spawnTimer = 0;
+    this.spawnInterval = 3 + Math.random() * 4;
+
+    this.heart = 3;
+
+    this.blinking = false;
+    this.blinkTimer = 0;
   }
 
-  /**
-   * 프레임마다 호출되어 장애물 이동 및 충돌 체크
-   */
+  setCar(car) {
+    this.car = car;
+  }
+
   update(delta) {
-    this.timeSinceLastSpawn += delta;
-
-    if (this.timeSinceLastSpawn >= this.spawnInterval) {
-      this.spawnObstacle();
-      this.timeSinceLastSpawn = 0;
-    }
-
-    for (let i = this.obstacles.length - 1; i >= 0; i--) {
-      const obs = this.obstacles[i];
-      obs.position.z -= 30 * delta; // 장애물이 뒤로 움직이는 듯한 연출
-
-      if (obs.position.z < this.car.position.z + this.despawnZ) {
-        this.scene.remove(obs);
-        this.obstacles.splice(i, 1);
-        continue;
-      }
-
-      // 충돌 감지
-      if (this.checkCollision(this.car, obs)) {
-        this.onCollision(); // 외부에서 처리
-      }
-    }
-  }
-
-  /**
-   * 장애물 생성
-   */
-  spawnObstacle() {
     if (!this.car) return;
-    const geometry = new THREE.BoxGeometry(2, 2, 2);
-    const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-    const obstacle = new THREE.Mesh(geometry, material);
 
-    // 장애물 생성 위치: 차를 기준으로 z방향 앞쪽, x는 랜덤
-    const x = (Math.random() - 0.5) * 20; // -10 ~ 10
-   obstacle.position.set(
-    this.car.position.x + Math.random() * 20 - 10,
-    0,
-    this.car.position.z + 100
-  );
-  this.scene.add(obstacle);
-  this.obstacles.push(obstacle);
-  }
-
-  /**
-   * AABB 충돌 감지
-   */
-  checkCollision(obj1, obj2) {
-    const box1 = new THREE.Box3().setFromObject(obj1);
-    const box2 = new THREE.Box3().setFromObject(obj2);
-    return box1.intersectsBox(box2);
-  }
-
-  /**
-   * 모든 장애물 제거 (재시작 시)
-   */
-  reset() {
-    for (const obs of this.obstacles) {
-      this.scene.remove(obs);
+    // 1. 좀비 생성
+    this.spawnTimer += delta;
+    if (this.spawnTimer > this.spawnInterval) {
+      this.spawnZombie();
+      this.spawnTimer = 0;
+      this.spawnInterval = 3 + Math.random() * 4;
     }
-    this.obstacles = [];
+
+    // 2. 충돌 판정
+    if (!this.blinking) {
+      for (const zombie of this.zombieList) {
+        const dx = this.car.position.x - zombie.position.x;
+        const dz = this.car.position.z - zombie.position.z;
+        const distance = Math.sqrt(dx * dx + dz * dz);
+
+        if (distance < 5) {
+          this.heart -= 1;
+          this.blinking = true;
+          this.blinkTimer = 0;
+
+          if (this.uiManager?.updateHearts) {
+            this.uiManager.updateHearts(this.heart);
+          }
+
+          if (this.heart <= 0 && this.onGameOver) {
+            this.onGameOver();  // 게임 오버 콜백 실행
+          }
+
+          break;
+        }
+      }
+    } else {
+      // 3. 깜빡이 효과
+      this.blinkTimer += delta;
+      const visible = Math.floor(this.blinkTimer * 10) % 2 === 0;
+      this.car.visible = visible;
+
+      if (this.blinkTimer > 1) {
+        this.car.visible = true;
+        this.blinking = false;
+      }
+    }
+  }
+
+  spawnZombie() {
+    this.zombieLoader.load('public/models/Zombie (1).glb', (gltf) => {
+      const zombie = gltf.scene;
+      zombie.scale.set(4, 4, 4);
+      zombie.position.set(0, 10, this.car.position.z + 50);
+
+      this.scene.add(zombie);
+      this.zombieList.push(zombie);
+    });
+  }
+
+  reset() {
+    this.heart = 3;
+    if (this.uiManager?.updateHearts) {
+      this.uiManager.updateHearts(this.heart);
+    }
+
+    for (const zombie of this.zombieList) {
+      this.scene.remove(zombie);
+    }
+    this.zombieList = [];
+
+    this.spawnTimer = 0;
+    this.blinking = false;
+    this.blinkTimer = 0;
   }
 }
+
+export default ObstacleManager;
