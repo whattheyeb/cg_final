@@ -16,6 +16,8 @@ class ObstacleManager {
     this.spawnTimer = 0;
     this.spawnInterval = 2 + Math.random() * 2;
 
+    this.lastOutOfBoundsTime = 0;
+
     this.heart = 3;
 
     this.blinking = false;
@@ -29,12 +31,36 @@ class ObstacleManager {
   update(delta) {
     if (!this.car) return;
 
+    // 자동차가 도로 경계를 벗어났는지 확인
+    const carX = this.car.position.x;
+    const currentTime = performance.now();
+
+
+    if (((carX >= 13 && carX <= 15) || (carX <= -13 && carX >= -15)) &&
+    currentTime - this.lastOutOfBoundsTime > 1000 )
+ {
+      this.heart -= 1;
+      this.blinking = true;
+      this.blinkTimer = 0;
+      this.lastOutOfBoundsTime = currentTime;
+
+
+      if (this.uiManager?.updateHearts) {
+        this.uiManager.updateHearts(this.heart);
+      }
+
+      if (this.heart <= 0 && this.onGameOver) {
+        this.onGameOver();  // 게임 오버 콜백 실행
+      }
+    }
+
+
     // 1. 좀비 생성
     this.spawnTimer += delta;
     if (this.spawnTimer > this.spawnInterval) {
       this.spawnZombie();
       this.spawnTimer = 0;
-      this.spawnInterval = 3 + Math.random() * 4;
+      this.spawnInterval = 2 + Math.random() * 4;
     }
 
     // 2. 충돌 판정
@@ -44,7 +70,7 @@ class ObstacleManager {
         const dz = this.car.position.z - zombie.position.z;
         const distance = Math.sqrt(dx * dx + dz * dz);
 
-        if (distance < 5) {
+        if (distance < 8) {
           this.heart -= 1;
           this.blinking = true;
           this.blinkTimer = 0;

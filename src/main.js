@@ -49,6 +49,8 @@ let roadManager;
 let gameOver = false;
 
 let fallTimer = 0;
+let heart = 3;
+
 
 //zombie(1).glb 모델 로드
 const zombieLoader = new GLTFLoader();
@@ -64,7 +66,7 @@ const obstacleManager = new ObstacleManager(scene, null, () => {
 // Car 모델 로드
 loader.load('public/models/Car.glb', (gltf) => {
   car = gltf.scene;
-  car.scale.set(0.5, 0.5, 0.5);
+  car.scale.set(0.4, 0.4, 0.4);
   car.position.set(0, 5, 0);
 
   car.traverse((child) => {
@@ -102,20 +104,25 @@ if (!carController) {
 }
 
 function restartGame() {
+    gameOver = false;
+
   // 차 위치/속도 초기화
   car.position.set(20, 5, 0);
   car.rotation.set(0, 0, 0);
   carController.speed = 10;
   carController.verticalSpeed = 0;
   carController.falling = false;
+    car.visible = true;
 
-  // 장애물 리셋 필요 시 여기에 추가
+  speed = 10;
+  distance = 0;
 
   // 상태 초기화
-  gameOver = false;
   fallTimer = 0;
-  uiManager.hideGameOver();
+  heart = 3
+  uiManager.hideGameOver(heart);
   obstacleManager.reset();
+  roadManager.reset();
 }
 
 
