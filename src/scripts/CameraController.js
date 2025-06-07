@@ -12,7 +12,7 @@ export default class CameraController {
     this.currentLookAt = new THREE.Vector3();
 
     // 카메라가 위치할 상대적인 오프셋 (차 기준)
-    this.offset = new THREE.Vector3(0, 30, -50);
+    this.offset = new THREE.Vector3(0, 30, -30);
 
     // 보간 계수 (0 ~ 1) - 값이 작을수록 더 부드러움
     this.smoothSpeed = 0.1;
