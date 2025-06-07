@@ -83,7 +83,7 @@ spawnZombie() {
     const startY = 0;  // 시작 y값 (지면 아래)
     const targetY = 10; // 최종 y값
 
-    zombie.position.set(randomX, startY, this.car.position.z + 30);
+    zombie.position.set(randomX, startY, this.car.position.z + 100);
     zombie.rotation.y = Math.PI;
 
     this.scene.add(zombie);
