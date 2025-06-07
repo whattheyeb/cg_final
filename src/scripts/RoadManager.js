@@ -8,6 +8,20 @@ class RoadManager {
     this.nextPositionZ = 0;           // 다음 길 조각이 생성될 위치 Z값
   }
 
+  reset() {
+  // 기존 세그먼트 삭제
+  for (const segment of this.segments) {
+    this.scene.remove(segment);
+  }
+
+  this.segments = [];
+  this.nextPositionZ = 0;
+
+  // 초기 길 다시 생성
+  this.init();
+}
+
+
   init() {
     for(let i = 0; i < this.maxSegments; i++) {
       this.addSegment();
