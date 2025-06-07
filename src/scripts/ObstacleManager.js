@@ -36,7 +36,7 @@ class ObstacleManager {
     const currentTime = performance.now();
 
 
-    if (((carX >= 13 && carX <= 15) || (carX <= -13 && carX >= -15)) &&
+    if (((carX >= 14 && carX <= 17) || (carX <= -14 && carX >= -17)) &&
     currentTime - this.lastOutOfBoundsTime > 1000 )
  {
       this.heart -= 1;
