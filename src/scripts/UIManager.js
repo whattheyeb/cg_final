@@ -34,10 +34,13 @@ export default class UIManager {
     }
   }
 
-  showGameOver(onRetry) {
-    this.gameOverPanel.style.display = 'flex';
-    this.retryButton.onclick = onRetry;
-  }
+ showGameOver() {
+  this.gameOverPanel.style.display = 'flex';
+  this.retryButton.onclick = () => {
+    location.reload(); // 페이지 새로고침
+  };
+}
+
 
   hideGameOver() {
     this.gameOverPanel.style.display = 'none';
