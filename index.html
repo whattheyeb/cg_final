@@ -1,46 +1,136 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
 
-  <!-- index.html에 추가할 부분 -->
-<div id="ui">
-  <div id="gameOverMessage" style="display: none;">🚗 Game Over!</div>
-</div>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>부산행 게임</title>
 
-<div id="hearts">
-  <img src="public/models/heart.png" id="heart1" style="width:40px;">
-  <img src="public/models/heart.png" id="heart2" style="width:40px;">
-  <img src="public/models/heart.png" id="heart3" style="width:40px;">
-</div>
+  <style>
+    #ui {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: white;
+      font-family: sans-serif;
+      font-size: 20px;
+      z-index: 10;
+    }
+
+    #gameOverMessage {
+      margin-top: 10px;
+      color: red;
+      font-size: 400px;
+      /* 글자 크기 크게 */
+      font-weight: bold;
+      /* 굵게 */
+      text-shadow: 2px 2px 4px black;
+      /* 그림자 효과로 더 잘 보이게 */
+    }
+
+    #hearts {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    #info-popup {
+      position: fixed;
+      top: 25%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.85);
+      color: rgb(27, 199, 226);
+      padding: 20px;
+      border-radius: 12px;
+      z-index: 100;
+      text-align: center;
+    }
+
+    #info-popup button {
+      margin-top: 10px;
+      padding: 6px 12px;
+      background-color: #ffffff22;
+      border: none;
+      color: white;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    #info-popup button:hover {
+      background-color: #ffffff44;
+    }
+
+    #info-button {
+      padding: 10px 20px;
+      /* 버튼 안 여백 */
+      font-size: 18px;
+      /* 글자 크기 */
+      font-weight: bold;
+      /* 글자 두껍게 */
+      border-radius: 8px;
+      /* 모서리 둥글게 */
+      background-color: #ffcc00;
+      /* 배경색 */
+      border: none;
+      /* 테두리 제거 */
+      cursor: pointer;
+      /* 마우스 오버 시 포인터 변경 */
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      /* 약간의 그림자 */
+      transition: background-color 0.3s;
+      /* 호버 효과 */
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="module" src="/src/main.js"></script>
+
+  <!-- UI 영역 -->
+  <div id="ui">
+    <div id="gameOverMessage" style="display: none;">🚗 Game Over!</div>
+  </div>
+
+  <!-- 하트 + 설명 버튼 -->
+  <div id="hearts">
+    <img src="public/models/heart.png" id="heart1" style="width:60px;">
+    <img src="public/models/heart.png" id="heart2" style="width:60px;">
+    <img src="public/models/heart.png" id="heart3" style="width:60px;">
+
+    <!-- 설명 버튼 -->
+    <button id="info-button" style="margin-left: 10px;">게임 설명</button>
+  </div>
+
+  <!-- 설명 팝업 -->
+  <div id="info-popup" style="display: none;">
+    <div class="popup-content">
+      <h2>게임 설명</h2>
+      <p>화살표 키로 자동차를 조작하며 좀비를 피하세요.<br>하트가 0이 되거나 길을 벗어나 떨어지면 게임 오버입니다.</p>
+      <button id="close-info">닫기</button>
+    </div>
+  </div>
+
+  <!-- 스타일 -->
 
 
+  <!-- 스크립트: 버튼 이벤트 핸들링 -->
+  <script>
+    document.getElementById('info-button').addEventListener('click', () => {
+      document.getElementById('info-popup').style.display = 'block';
+    });
 
-
-<style>
-  #ui {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    color: white;
-    font-family: sans-serif;
-    font-size: 20px;
-    z-index: 10;
-  }
-
-  #gameOverMessage {
-    margin-top: 10px;
-    color: red;
-    font-size: 30px;
-  }
-</style>
+    document.getElementById('close-info').addEventListener('click', () => {
+      document.getElementById('info-popup').style.display = 'none';
+    });
+  </script>
+</body>
 
 </html>
