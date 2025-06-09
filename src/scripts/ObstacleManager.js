@@ -36,7 +36,7 @@ class ObstacleManager {
     const currentTime = performance.now();
 
 
-    if (((carX >= 14 && carX <= 17) || (carX <= -14 && carX >= -17)) &&
+    if (((carX >= 16 && carX <= 19) || (carX <= -16 && carX >= -19)) &&
     currentTime - this.lastOutOfBoundsTime > 1000 )
  {
       this.heart -= 1;
@@ -105,7 +105,7 @@ spawnZombie() {
     zombie.scale.set(4, 4, 4);
 
     // 랜덤 x좌표
-    const randomX = Math.random() * 20 - 10;
+    const randomX = Math.random() * 20 - 15;
     const startY = 0;  // 시작 y값 (지면 아래)
     const targetY = 10; // 최종 y값
 

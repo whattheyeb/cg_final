@@ -51,6 +51,10 @@ let gameOver = false;
 let fallTimer = 0;
 let heart = 3;
 
+let distance = 0;
+let lastZ = 0;
+
+
 
 //zombie(1).glb 모델 로드
 const zombieLoader = new GLTFLoader();
@@ -59,7 +63,7 @@ const zombieList = [];
 const obstacleManager = new ObstacleManager(scene, null, () => {
   if (!gameOver) {
     gameOver = true;
-    uiManager.showGameOver(restartGame);
+    uiManager.showGameOver(distance);
   }
 }, uiManager);
 
@@ -116,6 +120,8 @@ function restartGame() {
 
   speed = 10;
   distance = 0;
+  lastZ = car.position.z;
+  uiManager.updateDistance(0);
 
   // 상태 초기화
   fallTimer = 0;
@@ -141,6 +147,11 @@ function animate() {
     cameraController.update();
     uiManager.updateSpeed(carController.speed);
     const isFalling = carController.update(inputManager, delta);
+    const currentZ = car.position.z;
+  distance += Math.abs(currentZ - lastZ);
+  lastZ = currentZ;
+
+  uiManager.updateDistance(distance);
 
 
     if (roadManager) {
@@ -156,7 +167,7 @@ function animate() {
       fallTimer += delta;
       if (fallTimer > 1.5) {
         gameOver = true;
-        uiManager.showGameOver(restartGame); // ✅ retry 콜백 연결
+        uiManager.showGameOver(distance); // ✅ retry 콜백 연결
       }
     }
   }

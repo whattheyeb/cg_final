@@ -75,6 +75,12 @@ this.gameOverPanel.appendChild(this.leaderboardPanel);
   document.body.appendChild(this.gameOverPanel);
 }
 
+updateDistance(distance) {
+  const display = document.getElementById("distance-display");
+  display.innerText = `거리: ${Math.floor(distance)}m`;
+}
+
+
 
   updateSpeed(speed) {
     if (this.speedDisplay) {
@@ -82,12 +88,40 @@ this.gameOverPanel.appendChild(this.leaderboardPanel);
     }
   }
 
- showGameOver() {
-  this.gameOverPanel.style.display = 'flex';
-  this.retryButton.onclick = () => {
-    location.reload(); // 페이지 새로고침
+showGameOver(distance) {
+  const distanceValue = Math.floor(distance);
+  const finalDistanceDiv = document.getElementById('finalDistance');
+  finalDistanceDiv.style.fontWeight = 'bold';
+  finalDistanceDiv.textContent = `당신은 ${distanceValue}m 동안 생존하셨습니다`;
+
+  
+
+  const retryButton = document.createElement('button');
+  retryButton.style.fontWeight = 'bold';
+  retryButton.textContent = '다시하기 (Retry)';
+  retryButton.style.marginTop = '10px';
+  retryButton.style.padding = '8px 16px';
+  retryButton.style.backgroundColor = '#80ff00';
+  retryButton.style.color = '#000000';
+  retryButton.style.border = '1px solid #ccc';
+  retryButton.style.borderRadius = '5px';
+  retryButton.style.cursor = 'pointer';
+  retryButton.style.fontSize = '14px';
+  retryButton.onclick = () => {
+    location.reload();
   };
+
+  finalDistanceDiv.appendChild(document.createElement('br'));
+  finalDistanceDiv.appendChild(retryButton);
+
+  const gameOverMessage = document.getElementById('gameOverMessage');
+  gameOverMessage.style.display = 'flex';
+
 }
+
+
+
+
 
 
   hideGameOver() {
