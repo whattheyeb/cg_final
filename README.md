@@ -13,6 +13,7 @@
 - 클론받은 폴더 안에서 npm create vite@latest .
 - main.js 와 index.html은 수정필요함
 - npm install three > npm install 한번 더
+- npm install gsap (추가 라이브러리)
 - 설치가 모두 완료되었다면 npm run dev 로 로컬 실행
 
 ---
