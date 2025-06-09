@@ -6,6 +6,16 @@
 게임 UI는 HTML, CSS, 자바스크립트로 구현되었으며, 랭킹 데이터는 로컬 스토리지에 저장하여 플레이어 점수를 관리한다(구현 예정).
 
 ---
+## 설치 방법
+- https://nodejs.org/en/download 
+    - node -v, npm -v 로 설치 확인
+- git clone https://github.com/whattheyeb/cg_final.git 
+- 클론받은 폴더 안에서 npm create vite@latest .
+- main.js 와 index.html은 수정필요함
+- npm install three > npm install 한번 더
+- 설치가 모두 완료되었다면 npm run dev 로 로컬 실행
+
+---
 
 ## 사용 언어 및 라이브러리
 - **개발 언어**: JavaScript (ES6+)
